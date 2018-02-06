@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function commerce_shs_views_data_alter(&$data) {
+/*
+  // This works but the query doesn't do what is needed. It does something like:
+  // ...WHERE commerce_product.nid IN  (SELECT tn.nid AS nid FROM {taxonomy_index} tn LEFT OUTER JOIN...
+  // But commerce_product fields do not seem to show up in taxonomy_index.
+  $data['commerce_product']['shs_term_node_tid_depth'] = array(
+    'help' => t('Display content if it has the selected taxonomy terms, or children of the selected terms. Due to additional complexity, this has fewer options than the versions without depth. Optionally the filter will use a simple hierarchical select for the selection of terms.'),
+    'real field' => 'product_id',
+    'filter' => array(
+      'title' => t('Has taxonomy terms (with depth; %type)', array('%type' => 'Simple hierarchical select')),
+      'help' => t('Provided by commerce_shs'),
+      'handler' => 'shs_handler_filter_term_node_tid_depth',
+    ),
+  );
+*/
+
+  // Get a list of all field instances with widget type "taxonomy_shs".
+  // This is piggybacking on the shs module (see shs_views_data_alter())
+  $instances = _shs_get_instances('commerce_product');
+  foreach ($instances as $field_instances) {
+    foreach ($field_instances as $field_name => $instance) {
+      // Replace filter handler for this field.
+      if (!empty($data["field_data_{$field_name}"]["{$field_name}_tid"]['filter']['handler'])) {
+        $data["field_data_{$field_name}"]["{$field_name}_tid"]['filter']['handler'] = 'commerce_shs_handler_filter_term_node_tid_depth';
+      }
+    }
+  }
+}
+

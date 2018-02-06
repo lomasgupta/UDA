@@ -1,0 +1,19 @@
+name = Commerce simple hierarchical select
+description = "Extending the SHS module to provide functionality for Commerce products"
+core = 7.x
+version = 7.x-1.0
+project = "commerce_shs"
+
+dependencies[] = "commerce"
+dependencies[] = "shs"
+files[] = commerce_shs_handler_filter_term_node_tid_depth.inc
+
+package = "Commerce (contrib)"
+
+
+; Information added by Drupal.org packaging script on 2018-01-10
+version = "7.x-1.0"
+core = "7.x"
+project = "commerce_shs"
+datestamp = "1515620288"
+
